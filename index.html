@@ -1241,6 +1241,7 @@
     document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
     document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
     dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.dot)));
+    cards.forEach(c => c.addEventListener('click', () => { if (!c.classList.contains('active')) goTo(+c.dataset.index); }));
 
     // Auto-avança a cada 5s
     let autoplay = setInterval(() => goTo(current + 1), 5000);
