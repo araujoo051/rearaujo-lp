@@ -570,49 +570,221 @@
       color: #9a80b0;
     }
 
-    /* ─────────────── EVENTO ─────────────── */
+    /* ─────────────── EVENTOS ─────────────── */
     #evento {
       position: relative;
-      height: 420px;
+      background: #06030f;
+      padding: 96px 40px 100px;
+      overflow: hidden;
+    }
+    #evento::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 20% 50%, rgba(80,40,120,0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 60% at 80% 50%, rgba(40,20,80,0.3) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .evento-header {
+      text-align: center;
+      margin-bottom: 56px;
+      position: relative;
+      z-index: 2;
+    }
+    .evento-header .section-eyebrow {
+      justify-content: center;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 12px;
+    }
+    .evento-header .section-eyebrow::before { background: rgba(255,255,255,0.15); }
+    .evento-header h2 {
+      font-family: var(--serif);
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 300;
+      color: white;
+    }
+
+    /* Carrossel 3D */
+    .eventos-scene {
+      perspective: 1200px;
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .eventos-track {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+      min-height: 380px;
+      position: relative;
+    }
+    .evento-card {
+      background: rgba(255,255,255,0.04);
+      border: 0.5px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 48px 40px;
+      width: 340px;
+      flex-shrink: 0;
+      transition: transform 0.6s cubic-bezier(0.34,1.56,0.64,1), opacity 0.6s ease, box-shadow 0.6s ease;
+      cursor: pointer;
+      position: relative;
+      transform-style: preserve-3d;
+      box-shadow: 0 0 0 rgba(140,80,200,0);
+    }
+    .evento-card.active {
+      transform: scale(1.06) translateZ(40px);
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(180,140,220,0.35);
+      box-shadow: 0 20px 60px rgba(120,60,180,0.3), 0 0 0 1px rgba(180,140,220,0.15);
+      z-index: 10;
+    }
+    .evento-card.prev {
+      transform: translateX(-20px) rotateY(18deg) scale(0.88) translateZ(-60px);
+      opacity: 0.5;
+    }
+    .evento-card.next {
+      transform: translateX(20px) rotateY(-18deg) scale(0.88) translateZ(-60px);
+      opacity: 0.5;
+    }
+    .evento-card:hover:not(.active) {
+      opacity: 0.75;
+    }
+    .card-badge {
+      display: inline-block;
+      font-family: var(--sans);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+    .card-badge.confirmed {
+      background: rgba(140,200,120,0.15);
+      color: rgba(160,220,140,0.9);
+      border: 0.5px solid rgba(140,200,120,0.25);
+    }
+    .card-badge.tbd {
+      background: rgba(180,140,220,0.12);
+      color: rgba(200,160,240,0.8);
+      border: 0.5px solid rgba(180,140,220,0.2);
+    }
+    .card-date {
+      font-family: var(--serif);
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+    .card-title {
+      font-family: var(--serif);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 300;
+      color: white;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .card-divider {
+      width: 32px;
+      height: 0.5px;
+      background: rgba(255,255,255,0.2);
+      margin-bottom: 16px;
+    }
+    .card-info {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.8;
+      margin-bottom: 28px;
+    }
+    .card-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--sans);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: white;
+      border: 0.5px solid rgba(255,255,255,0.3);
+      border-radius: 30px;
+      padding: 11px 22px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .card-btn:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.5);
+    }
+    .card-btn.disabled {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    /* Navegação dots */
+    .eventos-nav {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 44px;
+      position: relative;
+      z-index: 2;
+    }
+    .eventos-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      padding: 0;
+    }
+    .eventos-dot.active {
+      background: white;
+      width: 22px;
+      border-radius: 3px;
+    }
+
+    /* Setas */
+    .eventos-arrows {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 20px;
+      position: relative;
+      z-index: 2;
+    }
+    .eventos-arrow {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 0.5px solid rgba(255,255,255,0.2);
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      font-size: 16px;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
+      transition: all 0.2s;
     }
-    .evento-bg {
-      position: absolute;
-      inset: 0;
-      background-image: url('images/servicos/foto_6.png');
-      background-size: cover;
-      background-position: center;
-      background-color: #3a2858;
-    }
-    .evento-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(10,5,25,0.72);
-    }
-    .evento-content {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding: 0 28px;
-      width: 100%;
-    }
-    .evento-content .eyebrow { justify-content: center; }
-    .evento-content h2 {
-      font-family: var(--serif);
-      font-size: clamp(28px, 4vw, 52px);
-      font-weight: 300;
+    .eventos-arrow:hover {
+      background: rgba(255,255,255,0.08);
       color: white;
-      margin-bottom: 10px;
+      border-color: rgba(255,255,255,0.4);
     }
-    .evento-content p {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 32px;
-      font-weight: 300;
-      line-height: 1.7;
+
+    @media (max-width: 768px) {
+      #evento { padding: 72px 20px 80px; }
+      .eventos-track { gap: 0; overflow: hidden; }
+      .evento-card { width: min(320px, 88vw); padding: 36px 28px; }
+      .evento-card.prev, .evento-card.next { display: none; }
+      .evento-card.active { transform: scale(1) translateZ(0); }
     }
 
     /* ─────────────── FOOTER ─────────────── */
@@ -801,7 +973,7 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <div class="eyebrow reveal">Terapias Energéticas & Espiritualidade</div>
-      <h1 class="hero-title reveal reveal-delay-1">Desperte sua<br>energia interior.</h1>
+      <h1 class="hero-title reveal reveal-delay-1">Reconecte-se com o sei<br>eu interior.</h1>
       <p class="hero-sub reveal reveal-delay-2">Um caminho de transformação profunda através das terapias holísticas, do autoconhecimento e da reconexão com a sua essência.</p>
       <div class="btn-group reveal reveal-delay-3">
         <a href="https://wa.me/5551980702885" class="btn btn-primary">Agendar Atendimento</a>
@@ -914,15 +1086,62 @@
     <p class="depoimento-autor reveal reveal-delay-2">Re Araujo</p>
   </section>
 
-  <!-- EVENTO -->
+  <!-- EVENTOS -->
   <section id="evento">
-    <div class="evento-bg"></div>
-    <div class="evento-overlay"></div>
-    <div class="evento-content">
-      <div class="eyebrow reveal">Próximo Evento</div>
-      <h2 class="reveal reveal-delay-1">Reiki I — 27 de junho</h2>
-      <p class="reveal reveal-delay-2">Das 9h às 16h · Sintonia Espaço de Expansão<br>Porto Alegre, RS · Turma reduzida</p>
-      <a href="https://wa.me/5551980702885" class="btn btn-primary reveal reveal-delay-3">Garanta sua vaga</a>
+    <div class="evento-header reveal">
+      <div class="section-eyebrow">Agenda</div>
+      <h2>Próximos Eventos</h2>
+    </div>
+
+    <div class="eventos-scene">
+      <div class="eventos-track" id="eventosTrack">
+
+        <!-- Card 1 — Outubro -->
+        <div class="evento-card active" data-index="0">
+          <span class="card-badge confirmed">Confirmado</span>
+          <div class="card-date">31 de Outubro de 2026 · Sexta-feira</div>
+          <h3 class="card-title">Vivência Feminino<br>Ancestral</h3>
+          <div class="card-divider"></div>
+          <div class="card-info">
+            📍 Espaço Conexão Áurea<br>
+            Porto Alegre, RS<br><br>
+            Uma vivência profunda de reconexão com o feminino sagrado e a sabedoria ancestral que habita em cada uma de nós.
+          </div>
+          <a href="https://wa.me/5551980702885?text=Olá!%20Tenho%20interesse%20na%20Vivência%20Feminino%20Ancestral%20do%20dia%2031%20de%20outubro." class="card-btn" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Garantir minha vaga
+          </a>
+        </div>
+
+        <!-- Card 2 — Novembro -->
+        <div class="evento-card next" data-index="1">
+          <span class="card-badge tbd">Em breve</span>
+          <div class="card-date">Novembro de 2026</div>
+          <h3 class="card-title">Evento em<br>Definição</h3>
+          <div class="card-divider"></div>
+          <div class="card-info">
+            📍 Porto Alegre, RS<br><br>
+            Novidades chegando em breve. Entre em contato para ser avisada assim que os detalhes forem confirmados.
+          </div>
+          <a href="https://wa.me/5551980702885?text=Olá!%20Quero%20ser%20avisada%20sobre%20o%20evento%20de%20novembro." class="card-btn" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Quero ser avisada
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Setas -->
+      <div class="eventos-arrows">
+        <button class="eventos-arrow" id="prevBtn" aria-label="Anterior">&#8592;</button>
+        <button class="eventos-arrow" id="nextBtn" aria-label="Próximo">&#8594;</button>
+      </div>
+
+      <!-- Dots -->
+      <div class="eventos-nav">
+        <button class="eventos-dot active" data-dot="0" aria-label="Evento 1"></button>
+        <button class="eventos-dot" data-dot="1" aria-label="Evento 2"></button>
+      </div>
     </div>
   </section>
 
@@ -980,6 +1199,43 @@
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ── Carrossel 3D de Eventos ──
+    const cards = document.querySelectorAll('.evento-card');
+    const dots  = document.querySelectorAll('.eventos-dot');
+    let current = 0;
+    const total = cards.length;
+
+    function goTo(index) {
+      cards[current].className = 'evento-card prev';
+      dots[current].classList.remove('active');
+      current = (index + total) % total;
+      const next = (current + 1) % total;
+      cards[current].className = 'evento-card active';
+      cards[next].className    = 'evento-card next';
+      dots[current].classList.add('active');
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
+    document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
+    dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.dot)));
+
+    // Auto-avança a cada 5s
+    let autoplay = setInterval(() => goTo(current + 1), 5000);
+    document.getElementById('eventosTrack').addEventListener('mouseenter', () => clearInterval(autoplay));
+    document.getElementById('eventosTrack').addEventListener('mouseleave', () => {
+      autoplay = setInterval(() => goTo(current + 1), 5000);
+    });
+
+    // Swipe no mobile
+    let touchStartX = 0;
+    document.getElementById('eventosTrack').addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    document.getElementById('eventosTrack').addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
+    });
 
     // Hero revela imediatamente
     document.querySelectorAll('#hero .reveal').forEach((el, i) => {
