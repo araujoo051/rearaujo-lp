@@ -487,10 +487,137 @@
 
     .service-featured { height: 580px; }
     .service-featured .service-wide-overlay-left {
-      background: linear-gradient(to right, rgba(10,5,20,0.92) 0%, rgba(40,10,60,0.5) 55%, transparent 100%);
+      background: linear-gradient(to right, rgba(10,5,20,0.85) 0%, rgba(10,5,20,0.5) 50%, rgba(10,5,20,0.2) 100%);
     }
     @media (max-width: 768px) {
       .service-featured { height: auto; min-height: 440px; }
+    }
+
+    /* ─────────────── CURSOS ─────────────── */
+    #cursos {
+      background: var(--cream);
+      overflow: hidden;
+    }
+    .cursos-header {
+      padding: 80px 80px 48px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .cursos-header h2 {
+      font-family: var(--serif);
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 300;
+      color: #2a1840;
+      line-height: 1.15;
+    }
+    .cursos-nav-arrows {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .cursos-arrow {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 0.5px solid rgba(60,20,100,0.25);
+      background: transparent;
+      color: #6a4090;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .cursos-arrow:hover { background: rgba(60,20,100,0.08); border-color: rgba(60,20,100,0.5); }
+
+    .cursos-track-wrap {
+      overflow: hidden;
+      padding: 0 80px 80px;
+    }
+    .cursos-track {
+      display: flex;
+      gap: 24px;
+      transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+      will-change: transform;
+    }
+    .curso-card {
+      flex-shrink: 0;
+      width: calc(33.333% - 16px);
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 20px rgba(60,20,100,0.07);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .curso-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(60,20,100,0.14);
+    }
+    .curso-card-img {
+      height: 220px;
+      background-size: cover;
+      background-position: center;
+      background-color: #c0b0d0;
+      position: relative;
+    }
+    .curso-card-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(20,8,40,0.5) 0%, transparent 60%);
+    }
+    .curso-card-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      font-family: var(--sans);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      color: white;
+      border: 0.5px solid rgba(255,255,255,0.3);
+    }
+    .curso-card-body {
+      padding: 24px 28px 28px;
+    }
+    .curso-card-body h3 {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 300;
+      color: #2a1840;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .curso-card-body p {
+      font-size: 13px;
+      font-weight: 300;
+      color: #7a6090;
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+    .curso-card-body a {
+      font-family: var(--sans);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #5a3080;
+      text-decoration: none;
+      border-bottom: 0.5px solid rgba(90,48,128,0.4);
+      padding-bottom: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .curso-card-body a:hover { color: #3a1060; border-color: #3a1060; }
+
+    @media (max-width: 768px) {
+      .cursos-header { padding: 56px 24px 32px; flex-direction: column; align-items: flex-start; }
+      .cursos-track-wrap { padding: 0 24px 56px; }
+      .curso-card { width: calc(85vw - 48px); }
     }
 
     /* ─────────────── GALERIA ─────────────── */
@@ -957,6 +1084,7 @@
     <ul class="nav-links">
       <li><a href="#sobre">Sobre</a></li>
       <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#cursos">Cursos</a></li>
       <li><a href="#podcast">Podcast</a></li>
       <li><a href="#evento">Agenda</a></li>
     </ul>
@@ -970,6 +1098,7 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="#sobre" class="mobile-link">Sobre</a>
     <a href="#servicos" class="mobile-link">Serviços</a>
+    <a href="#cursos" class="mobile-link">Cursos</a>
     <a href="#podcast" class="mobile-link">Podcast</a>
     <a href="#evento" class="mobile-link">Agenda</a>
     <a href="https://wa.me/5551992940739" class="mobile-cta mobile-link">Agendar</a>
@@ -1076,6 +1205,73 @@
       </div>
     </div>
 
+  </section>
+
+  <!-- CURSOS -->
+  <section id="cursos">
+    <div class="cursos-header">
+      <div>
+        <div class="section-eyebrow reveal">Formações & Vivências</div>
+        <h2 class="reveal reveal-delay-1">Cursos &<br>Workshops</h2>
+      </div>
+      <div class="cursos-nav-arrows">
+        <button class="cursos-arrow" id="cursosPrev" aria-label="Anterior">&#8592;</button>
+        <button class="cursos-arrow" id="cursosNext" aria-label="Próximo">&#8594;</button>
+      </div>
+    </div>
+    <div class="cursos-track-wrap">
+      <div class="cursos-track" id="cursosTrack">
+
+        <div class="curso-card">
+          <div class="curso-card-img" style="background-color:#9a7ab0;">
+            <div class="curso-card-img-overlay"></div>
+            <span class="curso-card-badge">Online</span>
+          </div>
+          <div class="curso-card-body">
+            <h3>Terapias Multidimensionais</h3>
+            <p>Formação completa para quem deseja aprender e aplicar as terapias multidimensionais no cuidado de si e do outro.</p>
+            <a href="https://wa.me/5551992940739?text=Olá!%20Tenho%20interesse%20na%20formação%20de%20Terapias%20Multidimensionais." target="_blank" rel="noopener">Saber mais →</a>
+          </div>
+        </div>
+
+        <div class="curso-card">
+          <div class="curso-card-img" style="background-color:#7a9080;">
+            <div class="curso-card-img-overlay"></div>
+            <span class="curso-card-badge">Presencial</span>
+          </div>
+          <div class="curso-card-body">
+            <h3>Registros Akáshicos</h3>
+            <p>Aprenda a acessar os registros da alma e a conduzir leituras profundas para si e para outras pessoas.</p>
+            <a href="https://wa.me/5551992940739?text=Olá!%20Tenho%20interesse%20no%20curso%20de%20Registros%20Akáshicos." target="_blank" rel="noopener">Saber mais →</a>
+          </div>
+        </div>
+
+        <div class="curso-card">
+          <div class="curso-card-img" style="background-color:#b08060;">
+            <div class="curso-card-img-overlay"></div>
+            <span class="curso-card-badge">Híbrido</span>
+          </div>
+          <div class="curso-card-body">
+            <h3>Magia Divina do Fogo</h3>
+            <p>Rituais de transmutação e cura através do elemento fogo. Uma imersão na sabedoria ancestral e no poder da intenção.</p>
+            <a href="https://wa.me/5551992940739?text=Olá!%20Tenho%20interesse%20no%20curso%20de%20Magia%20Divina%20do%20Fogo." target="_blank" rel="noopener">Saber mais →</a>
+          </div>
+        </div>
+
+        <div class="curso-card">
+          <div class="curso-card-img" style="background-color:#8090b0;">
+            <div class="curso-card-img-overlay"></div>
+            <span class="curso-card-badge">Online</span>
+          </div>
+          <div class="curso-card-body">
+            <h3>Reiki — Nível I e II</h3>
+            <p>Iniciação e prática no sistema Usui de cura energética. Aprenda a canalizar e transmitir energia para equilíbrio e bem-estar.</p>
+            <a href="https://wa.me/5551992940739?text=Olá!%20Tenho%20interesse%20no%20curso%20de%20Reiki." target="_blank" rel="noopener">Saber mais →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </section>
 
   <!-- GALERIA -->
@@ -1259,6 +1455,44 @@
       const diff = touchStartX - e.changedTouches[0].clientX;
       if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
     });
+
+    // ── Carrossel de Cursos ──
+    const cursosTrack = document.getElementById('cursosTrack');
+    const cursoCards  = cursosTrack ? cursosTrack.querySelectorAll('.curso-card') : [];
+    let cursosIndex = 0;
+
+    function cursosVisible() {
+      return window.innerWidth <= 768 ? 1 : 3;
+    }
+    function cursosMax() {
+      return Math.max(0, cursoCards.length - cursosVisible());
+    }
+    function updateCursos() {
+      const cardWidth = cursoCards[0] ? cursoCards[0].offsetWidth + 24 : 0;
+      cursosTrack.style.transform = `translateX(-${cursosIndex * cardWidth}px)`;
+    }
+    if (cursosTrack) {
+      document.getElementById('cursosNext').addEventListener('click', () => {
+        cursosIndex = Math.min(cursosIndex + 1, cursosMax());
+        updateCursos();
+      });
+      document.getElementById('cursosPrev').addEventListener('click', () => {
+        cursosIndex = Math.max(cursosIndex - 1, 0);
+        updateCursos();
+      });
+      // Swipe mobile
+      let cTouchX = 0;
+      cursosTrack.addEventListener('touchstart', e => { cTouchX = e.touches[0].clientX; }, { passive: true });
+      cursosTrack.addEventListener('touchend', e => {
+        const diff = cTouchX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 40) {
+          if (diff > 0) cursosIndex = Math.min(cursosIndex + 1, cursosMax());
+          else cursosIndex = Math.max(cursosIndex - 1, 0);
+          updateCursos();
+        }
+      });
+      window.addEventListener('resize', () => { cursosIndex = Math.min(cursosIndex, cursosMax()); updateCursos(); });
+    }
 
     // Hero revela imediatamente
     document.querySelectorAll('#hero .reveal').forEach((el, i) => {
