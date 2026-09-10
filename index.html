@@ -542,6 +542,22 @@
     .cursos-track-wrap {
       overflow: hidden;
       padding: 0 80px 80px;
+      -webkit-overflow-scrolling: touch;
+    }
+    @media (max-width: 768px) {
+      .cursos-track-wrap {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .cursos-track-wrap::-webkit-scrollbar { display: none; }
+      .cursos-track {
+        transition: none;
+      }
+      .curso-card {
+        scroll-snap-align: start;
+      }
     }
     .cursos-track {
       display: flex;
