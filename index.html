@@ -622,18 +622,19 @@
       line-height: 1.75;
       margin-bottom: 20px;
     }
-    .curso-card-body a {
+    a.curso-card { text-decoration: none; display: flex; flex-direction: column; }
+    .curso-card-link {
       font-family: var(--sans);
       font-size: 10px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: #5a3080;
-      text-decoration: none;
       border-bottom: 0.5px solid rgba(90,48,128,0.4);
       padding-bottom: 2px;
+      display: inline-block;
       transition: border-color 0.2s, color 0.2s;
     }
-    .curso-card-body a:hover { color: #3a1060; border-color: #3a1060; }
+    a.curso-card:hover .curso-card-link { color: #3a1060; border-color: #3a1060; }
 
     @media (max-width: 768px) {
       .cursos-header { padding: 56px 24px 32px; flex-direction: column; align-items: flex-start; }
@@ -1272,7 +1273,7 @@
     <div class="cursos-track-wrap">
       <div class="cursos-track" id="cursosTrack">
 
-        <div class="curso-card">
+        <a class="curso-card" href="curso-multidimensional.html">
           <div class="curso-card-img" style="background-color:#9a7ab0;">
             <div class="curso-card-img-overlay"></div>
             <span class="curso-card-badge">Online</span>
@@ -1280,11 +1281,11 @@
           <div class="curso-card-body">
             <h3>Terapias Multidimensionais</h3>
             <p>Formação completa para quem deseja aprender e aplicar as terapias multidimensionais no cuidado de si e do outro.</p>
-            <a href="curso-multidimensional.html">Saber mais →</a>
+            <span class="curso-card-link">Saber mais →</span>
           </div>
-        </div>
+        </a>
 
-        <div class="curso-card">
+        <a class="curso-card" href="curso-akashicos.html">
           <div class="curso-card-img" style="background-color:#7a9080;">
             <div class="curso-card-img-overlay"></div>
             <span class="curso-card-badge">Presencial</span>
@@ -1292,11 +1293,11 @@
           <div class="curso-card-body">
             <h3>Registros Akáshicos</h3>
             <p>Aprenda a acessar os registros da alma e a conduzir leituras profundas para si e para outras pessoas.</p>
-            <a href="curso-akashicos.html">Saber mais →</a>
+            <span class="curso-card-link">Saber mais →</span>
           </div>
-        </div>
+        </a>
 
-        <div class="curso-card">
+        <a class="curso-card" href="curso-magia-fogo.html">
           <div class="curso-card-img" style="background-color:#b08060;">
             <div class="curso-card-img-overlay"></div>
             <span class="curso-card-badge">Híbrido</span>
@@ -1304,11 +1305,11 @@
           <div class="curso-card-body">
             <h3>Magia Divina do Fogo</h3>
             <p>Rituais de transmutação e cura através do elemento fogo. Uma imersão na sabedoria ancestral e no poder da intenção.</p>
-            <a href="curso-magia-fogo.html">Saber mais →</a>
+            <span class="curso-card-link">Saber mais →</span>
           </div>
-        </div>
+        </a>
 
-        <div class="curso-card">
+        <a class="curso-card" href="curso-reiki.html">
           <div class="curso-card-img" style="background-color:#8090b0;">
             <div class="curso-card-img-overlay"></div>
             <span class="curso-card-badge">Online</span>
@@ -1316,9 +1317,9 @@
           <div class="curso-card-body">
             <h3>Reiki — Nível I e II</h3>
             <p>Iniciação e prática no sistema Usui de cura energética. Aprenda a canalizar e transmitir energia para equilíbrio e bem-estar.</p>
-            <a href="curso-reiki.html">Saber mais →</a>
+            <span class="curso-card-link">Saber mais →</span>
           </div>
-        </div>
+        </a>
 
       </div>
     </div>
@@ -1539,7 +1540,8 @@
       const cardWidth = cursoCards[0] ? cursoCards[0].offsetWidth + 24 : 0;
       cursosTrack.style.transform = `translateX(-${cursosIndex * cardWidth}px)`;
     }
-    if (cursosTrack) {
+    if (cursosTrack && !isMobile()) {
+      // Desktop: setas controlam o transform
       document.getElementById('cursosNext').addEventListener('click', () => {
         cursosIndex = Math.min(cursosIndex + 1, cursosMax());
         updateCursos();
@@ -1548,18 +1550,17 @@
         cursosIndex = Math.max(cursosIndex - 1, 0);
         updateCursos();
       });
-      // Swipe mobile
-      let cTouchX = 0;
-      cursosTrack.addEventListener('touchstart', e => { cTouchX = e.touches[0].clientX; }, { passive: true });
-      cursosTrack.addEventListener('touchend', e => {
-        const diff = cTouchX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 40) {
-          if (diff > 0) cursosIndex = Math.min(cursosIndex + 1, cursosMax());
-          else cursosIndex = Math.max(cursosIndex - 1, 0);
-          updateCursos();
-        }
-      });
       window.addEventListener('resize', () => { cursosIndex = Math.min(cursosIndex, cursosMax()); updateCursos(); });
+    }
+    if (cursosTrack && isMobile()) {
+      // Mobile: scroll nativo — bloqueia clique se foi arraste
+      const wrap = cursosTrack.parentElement;
+      let dragX = 0, isDrag = false;
+      wrap.addEventListener('touchstart', e => { dragX = e.touches[0].clientX; isDrag = false; }, { passive: true });
+      wrap.addEventListener('touchmove', e => { if (Math.abs(e.touches[0].clientX - dragX) > 8) isDrag = true; }, { passive: true });
+      cursoCards.forEach(c => {
+        c.addEventListener('click', e => { if (isDrag) e.preventDefault(); });
+      });
     }
 
     // Hero revela imediatamente
