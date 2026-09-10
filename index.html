@@ -937,11 +937,40 @@
     }
 
     @media (max-width: 768px) {
-      #evento { padding: 72px 20px 80px; }
-      .eventos-track { gap: 0; overflow: hidden; }
-      .evento-card { width: min(320px, 88vw); padding: 36px 28px; }
-      .evento-card.prev, .evento-card.next { display: none; }
-      .evento-card.active { transform: scale(1) translateZ(0); }
+      #evento { padding: 72px 0 80px; }
+      .eventos-scene { max-width: 100%; }
+      .eventos-track {
+        gap: 16px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 12px 24px 20px;
+        justify-content: flex-start;
+        min-height: unset;
+        perspective: none;
+      }
+      .eventos-track::-webkit-scrollbar { display: none; }
+      .evento-card {
+        width: 78vw;
+        flex-shrink: 0;
+        scroll-snap-align: center;
+        padding: 32px 24px;
+        transition: none;
+        cursor: default;
+      }
+      .evento-card.prev,
+      .evento-card.next {
+        display: block;
+        transform: scale(0.95);
+        opacity: 0.6;
+      }
+      .evento-card.active {
+        transform: scale(1) translateZ(0);
+        opacity: 1;
+      }
+      .eventos-arrows,
+      .eventos-nav { display: none; }
     }
 
     /* ─────────────── FOOTER ─────────────── */
