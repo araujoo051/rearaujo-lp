@@ -27,7 +27,7 @@
       --sans: 'Inter', system-ui, sans-serif;
     }
 
-    html { scroll-behavior: smooth; background: var(--dark); }
+    html { background: var(--dark); }
 
     body {
       background: var(--dark);
@@ -1436,6 +1436,16 @@
 
   <script>
     const isMobile = () => window.innerWidth <= 768;
+
+    // Links âncora sem #hash na URL
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', e => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
 
     // Nav scroll
     const navbar = document.getElementById('navbar');
