@@ -1469,43 +1469,51 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // ── Carrossel 3D de Eventos ──
+    // ── Carrossel de Eventos ──
     const cards = document.querySelectorAll('.evento-card');
     const dots  = document.querySelectorAll('.eventos-dot');
+    const track = document.getElementById('eventosTrack');
     let current = 0;
     const total = cards.length;
 
-    function goTo(index) {
-      cards[current].className = 'evento-card prev';
-      dots[current].classList.remove('active');
-      current = (index + total) % total;
-      const next = (current + 1) % total;
-      cards[current].className = 'evento-card active';
-      cards[next].className    = 'evento-card next';
-      dots[current].classList.add('active');
+    function setClasses(idx) {
+      cards.forEach((c, i) => {
+        const pos = ((i - idx) + total) % total;
+        c.className = 'evento-card ' + (pos === 0 ? 'active' : pos === 1 ? 'next' : 'prev');
+      });
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
     }
 
-    document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
-    document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
-    dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.dot)));
-    cards.forEach(c => c.addEventListener('click', () => { if (!c.classList.contains('active')) goTo(+c.dataset.index); }));
+    function goTo(index) {
+      current = (index + total) % total;
+      setClasses(current);
+    }
 
-    // Auto-avança a cada 5s
-    let autoplay = setInterval(() => goTo(current + 1), 5000);
-    document.getElementById('eventosTrack').addEventListener('mouseenter', () => clearInterval(autoplay));
-    document.getElementById('eventosTrack').addEventListener('mouseleave', () => {
-      autoplay = setInterval(() => goTo(current + 1), 5000);
-    });
+    // Desktop: setas, dots, clique no card, autoplay
+    if (!isMobile()) {
+      document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
+      document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
+      dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.dot)));
+      cards.forEach(c => c.addEventListener('click', () => { if (!c.classList.contains('active')) goTo(+c.dataset.index); }));
 
-    // Swipe no mobile
-    let touchStartX = 0;
-    document.getElementById('eventosTrack').addEventListener('touchstart', e => {
-      touchStartX = e.touches[0].clientX;
-    }, { passive: true });
-    document.getElementById('eventosTrack').addEventListener('touchend', e => {
-      const diff = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
-    });
+      let autoplay = setInterval(() => goTo(current + 1), 5000);
+      track.addEventListener('mouseenter', () => clearInterval(autoplay));
+      track.addEventListener('mouseleave', () => { autoplay = setInterval(() => goTo(current + 1), 5000); });
+    }
+
+    // Mobile: IntersectionObserver sincroniza classes com scroll nativo
+    if (isMobile()) {
+      const cardObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+            const idx = +entry.target.dataset.index;
+            current = idx;
+            setClasses(idx);
+          }
+        });
+      }, { root: track, threshold: 0.6 });
+      cards.forEach(c => cardObserver.observe(c));
+    }
 
     // ── Carrossel de Cursos ──
     const cursosTrack = document.getElementById('cursosTrack');
