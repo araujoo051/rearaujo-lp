@@ -486,8 +486,14 @@
     }
 
     .service-featured { height: 580px; }
+    .service-featured .service-wide-bg {
+      transform: scale(1) !important;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.75;
+    }
     .service-featured .service-wide-overlay-left {
-      background: linear-gradient(to right, rgba(10,5,20,0.85) 0%, rgba(10,5,20,0.5) 50%, rgba(10,5,20,0.2) 100%);
+      background: linear-gradient(to right, rgba(10,5,20,0.72) 0%, rgba(10,5,20,0.3) 55%, rgba(10,5,20,0.05) 100%);
     }
     @media (max-width: 768px) {
       .service-featured { height: auto; min-height: 440px; }
