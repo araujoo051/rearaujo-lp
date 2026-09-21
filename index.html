@@ -250,7 +250,7 @@
       text-decoration: none;
       border-radius: 30px;
       padding: 14px 28px;
-      transition: all 0.25s;
+      transition: all 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
       border: none;
       display: inline-block;
@@ -258,15 +258,33 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      position: relative;
+      overflow: hidden;
     }
+    .btn::before {
+      content: '';
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(0,0,0,0.35) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      opacity: 0;
+      pointer-events: none;
+      left: var(--mx, 50%);
+      top: var(--my, 50%);
+    }
+    .btn:hover::before { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     .btn-primary { background: white; color: var(--dark); }
-    .btn-primary:hover { background: var(--cream); }
+    .btn-primary::before { background: radial-gradient(circle, rgba(0,0,0,0.12) 0%, transparent 70%); }
+    .btn-primary:hover { background: var(--cream); box-shadow: 0 4px 24px rgba(0,0,0,0.18); }
     .btn-ghost {
       background: transparent;
       color: white;
       border: 0.5px solid rgba(255,255,255,0.4);
     }
-    .btn-ghost:hover { background: rgba(255,255,255,0.08); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.06); box-shadow: 0 4px 24px rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.6); }
 
     .scroll-hint {
       position: absolute;
@@ -1437,6 +1455,15 @@
 
   <script>
     const isMobile = () => window.innerWidth <= 768;
+
+    // Efeito blur que segue o mouse nos botões
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        btn.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        btn.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+    });
 
     // Links âncora sem #hash na URL
     document.querySelectorAll('a[href^="#"]').forEach(link => {
