@@ -383,7 +383,10 @@
       background: var(--dark);
       padding: 80px 80px 48px;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
+    .services-header > * { position: relative; z-index: 1; }
     .services-header .section-eyebrow {
       justify-content: center;
       color: var(--text-muted);
@@ -699,11 +702,14 @@
     }
     .podcast-text {
       background: #0e0a18;
+      position: relative;
+      overflow: hidden;
       padding: 72px 64px;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
+    .podcast-text > * { position: relative; z-index: 1; }
     .podcast-text .section-eyebrow { color: var(--text-muted); }
     .podcast-text .section-eyebrow::before { background: rgba(255,255,255,0.2); }
     .podcast-text h2 {
@@ -992,9 +998,22 @@
       .eventos-nav { display: none; }
     }
 
+    /* ─────────────── CONSTELLATION CANVAS ─────────────── */
+    .constellation-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    footer > *:not(.constellation-canvas) { position: relative; z-index: 1; }
+
     /* ─────────────── FOOTER ─────────────── */
     footer {
       background: var(--dark);
+      position: relative;
+      overflow: hidden;
       padding: 56px 80px;
       display: flex;
       justify-content: space-between;
@@ -1207,6 +1226,7 @@
   <section id="servicos">
 
     <div class="services-header">
+      <canvas class="constellation-canvas" aria-hidden="true"></canvas>
       <div class="section-eyebrow">O que ofereço</div>
       <h2>Serviços</h2>
     </div>
@@ -1358,6 +1378,7 @@
   <section id="podcast">
     <div class="podcast-img"></div>
     <div class="podcast-text">
+      <canvas class="constellation-canvas" aria-hidden="true"></canvas>
       <div class="section-eyebrow reveal">Podcast</div>
       <h2 class="reveal reveal-delay-1">Conversas<br>que Curam</h2>
       <p class="reveal reveal-delay-2">Episódios sobre espiritualidade, cura, autoconhecimento e consciência. Uma conversa honesta sobre o caminho de dentro.</p>
@@ -1435,6 +1456,7 @@
 
   <!-- FOOTER -->
   <footer>
+    <canvas class="constellation-canvas" aria-hidden="true"></canvas>
     <div>
       <div class="footer-brand">Re Araujo</div>
       <div class="footer-sub">Realinhamento da Consciência · Porto Alegre, RS</div>
@@ -1456,6 +1478,115 @@
 
   <script>
     const isMobile = () => window.innerWidth <= 768;
+
+    // ── Constelações animadas ──
+    (function() {
+      function initConstellation(canvas) {
+        const parent = canvas.parentElement;
+        const ctx = canvas.getContext('2d');
+        let W, H, stars, raf;
+
+        const NUM = 55;
+        const MAX_DIST = 120;
+        const STAR_COLORS = [
+          'rgba(180,160,220,A)', // lilás
+          'rgba(140,170,240,A)', // azul-lilás
+          'rgba(220,200,255,A)', // branco-lilás
+          'rgba(160,140,200,A)', // roxo médio
+        ];
+
+        function resize() {
+          W = canvas.width  = parent.offsetWidth;
+          H = canvas.height = parent.offsetHeight;
+        }
+
+        function rand(min, max) { return min + Math.random() * (max - min); }
+
+        function starPath(cx, cy, r, points) {
+          const step = Math.PI / points;
+          ctx.beginPath();
+          for (let i = 0; i < points * 2; i++) {
+            const angle = i * step - Math.PI / 2;
+            const radius = i % 2 === 0 ? r : r * 0.38;
+            ctx.lineTo(cx + Math.cos(angle) * radius, cy + Math.sin(angle) * radius);
+          }
+          ctx.closePath();
+        }
+
+        function mkStar() {
+          const color = STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)];
+          return {
+            x: rand(0, W), y: rand(0, H),
+            vx: rand(-0.12, 0.12), vy: rand(-0.12, 0.12),
+            r: rand(1.2, 3.2),
+            points: Math.random() < 0.5 ? 4 : 6,
+            alpha: rand(0.4, 1),
+            twinkleSpeed: rand(0.005, 0.018),
+            twinkleDir: Math.random() < 0.5 ? 1 : -1,
+            color,
+          };
+        }
+
+        function init() {
+          resize();
+          stars = Array.from({ length: NUM }, mkStar);
+        }
+
+        function draw() {
+          ctx.clearRect(0, 0, W, H);
+
+          // Linhas de constelação
+          for (let i = 0; i < stars.length; i++) {
+            for (let j = i + 1; j < stars.length; j++) {
+              const dx = stars[i].x - stars[j].x;
+              const dy = stars[i].y - stars[j].y;
+              const d = Math.sqrt(dx * dx + dy * dy);
+              if (d < MAX_DIST) {
+                const alpha = (1 - d / MAX_DIST) * 0.18;
+                ctx.beginPath();
+                ctx.moveTo(stars[i].x, stars[i].y);
+                ctx.lineTo(stars[j].x, stars[j].y);
+                ctx.strokeStyle = `rgba(180,160,230,${alpha})`;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+              }
+            }
+          }
+
+          // Estrelas
+          stars.forEach(s => {
+            s.alpha += s.twinkleSpeed * s.twinkleDir;
+            if (s.alpha >= 1)   { s.alpha = 1;   s.twinkleDir = -1; }
+            if (s.alpha <= 0.2) { s.alpha = 0.2; s.twinkleDir =  1; }
+
+            ctx.save();
+            ctx.translate(s.x, s.y);
+            starPath(0, 0, s.r, s.points);
+            ctx.fillStyle = s.color.replace('A', s.alpha.toFixed(2));
+            ctx.shadowColor = s.color.replace('A', '0.6');
+            ctx.shadowBlur = s.r * 3;
+            ctx.fill();
+            ctx.restore();
+
+            s.x += s.vx; s.y += s.vy;
+            if (s.x < -10) s.x = W + 10;
+            if (s.x > W + 10) s.x = -10;
+            if (s.y < -10) s.y = H + 10;
+            if (s.y > H + 10) s.y = -10;
+          });
+
+          raf = requestAnimationFrame(draw);
+        }
+
+        const ro = new ResizeObserver(() => { resize(); });
+        ro.observe(parent);
+
+        init();
+        draw();
+      }
+
+      document.querySelectorAll('.constellation-canvas').forEach(initConstellation);
+    })();
 
     // Efeito blur que segue o mouse nos botões
     document.querySelectorAll('.btn').forEach(btn => {
